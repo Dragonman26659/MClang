@@ -1,0 +1,10 @@
+var int var1 = 1
+var int var2 = 0
+var int temp = 0
+
+while (true)
+{
+  temp = var1 + var2
+  print(temp)
+  var2 = temp
+}
