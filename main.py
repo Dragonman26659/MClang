@@ -26,9 +26,12 @@ def Find_Next_Address():
   return length
 
 
-def ProsessLine(line, assembly_instructions):
+def ProsessLine(line):
   global Variables
   global UsedAddresses
+
+  assembly_instructions = []
+  
   # Check if the line is a variable declaration
   if line.startswith("var"):
     parts = line.split()
@@ -99,10 +102,12 @@ def ProsessLine(line, assembly_instructions):
               elif "-" in line:
                 assembly_instructions.append("sub 0 1")
 
+              assembly_instructions.append("StoreAccumator 3")
+
               # Store the result back to memory
               if result_var in Variables:
                 assembly_instructions.append(
-                    f"store_to_RAM 0 {Variables[result_var]['address']}")
+                    f"store_to_RAM {Variables[result_var]['address']} 3")
               else:
                 exit(f"Error: Variable {result_var} not declared")
             else:
@@ -125,6 +130,8 @@ def ProsessLine(line, assembly_instructions):
         assembly_instructions.append(f"output {Variables[var_name]['address']}")
     else:
         print(f"Error: Variable {var_name} not declared")
+
+  return assembly_instructions
 
 
 def SetALUoutputToBool(condition, assembly_instructions):
@@ -157,12 +164,13 @@ def CompileFile(path):
   global UsedAddresses
   global Variables
   assembly_instructions = []
+  temp = [[], [], [], [], [], []]
+  nesting_val = 0
 
   inWhileLoop = False
-  inForLoop = False
   inIfStatement = False
   condition = None
-  startLoop =  0
+  startLoop =  [0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0]
 
   fileList = FileToList(path)
   for line in fileList:
@@ -174,16 +182,19 @@ def CompileFile(path):
               if len(cparts) >  1:
                   condition = cparts[1].split(')')[0].strip()
               inWhileLoop = True
-              startLoop = len(assembly_instructions)
+              startLoop[nesting_val] = len(assembly_instructions)
+              nesting_val += 1
 
           elif inWhileLoop:
               if parts[0] == "}":
                   SetALUoutputToBool(condition, assembly_instructions)
                   assembly_instructions.append(f"jump_if_0 {len(assembly_instructions) +  1}")
-                  assembly_instructions.append(f"jump {startLoop}")
+                  assembly_instructions.extend(temp[nesting_val])
+                  assembly_instructions.append(f"jump {startLoop[nesting_val]}")
                   inWhileLoop = False
+                  nesting_val -= 1
               elif parts[0] != "}" or parts[0] != "{":
-                  ProsessLine(line, assembly_instructions)
+                temp[nesting_val].extend(ProsessLine(line))
 
           # Handling if statements
           if parts[0] == "if" and not inIfStatement:
@@ -195,13 +206,14 @@ def CompileFile(path):
           elif inIfStatement:
               if parts[0] == "}":
                   SetALUoutputToBool(condition, assembly_instructions)
-                  assembly_instructions.append(f"jump_not_0 {len(assembly_instructions)}")
+                  assembly_instructions.append(f"jump_not_0 {(len(assembly_instructions) - 1) + len(temp[nesting_val])}")
+                  assembly_instructions.extend(temp[nesting_val])
                   inIfStatement = False
               elif parts[0] != "}" or parts[0] != "{":
-                  ProsessLine(line, assembly_instructions)
+                temp[nesting_val].extend(ProsessLine(line))
 
           else:
-              ProsessLine(line, assembly_instructions)
+            assembly_instructions.extend(ProsessLine(line))
 
   with open("assembly_output.asmbl", 'w') as file:
       for instruction in assembly_instructions:
