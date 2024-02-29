@@ -1,4 +1,5 @@
 loadToRam 0 1
 loadToRam 1 0
 output 1
+output 1
 output 0

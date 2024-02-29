@@ -1,4 +1,5 @@
 import emulator
+
 UsedAddresses = []
 Variables = {}
 Subroutines = {}
@@ -31,7 +32,7 @@ def ProsessLine(line):
   global UsedAddresses
 
   assembly_instructions = []
-  
+
   # Check if the line is a variable declaration
   if line.startswith("var"):
     parts = line.split()
@@ -50,9 +51,7 @@ def ProsessLine(line):
             'type': var_type,
             'address': Find_Next_Address()
         }
-        print(
-            f"Variable {var_name} of type {var_type} assigned RAM address {Variables[var_name]['address']}"
-        )
+        
         # Generate assembly instruction to load value into memory
         if var_type == "int":
           assembly_instructions.append(
@@ -66,9 +65,12 @@ def ProsessLine(line):
                 f"loadToRam {Variables[var_name]['address']} 1")
       else:
         exit(f"Error: Variable {var_name} already declared")
+
+  
   # Check if the line is a variable assignment with arithmetic operations
   elif "=" in line:
     parts = line.split("=")
+    print(parts)
     if len(parts) == 2:
       var_name = parts[0].strip()
       if var_name in Variables:
@@ -89,12 +91,10 @@ def ProsessLine(line):
               # Load operands into registers
               if operand1 in Variables:
                 assembly_instructions.append(
-                    f"load_RAM_to_register {Variables[operand1]['address']} 1"
-                )
+                    f"load_RAM_to_register {Variables[operand1]['address']} 1")
               if operand2 in Variables:
                 assembly_instructions.append(
-                    f"load_RAM_to_register {Variables[operand2]['address']} 2"
-                )
+                    f"load_RAM_to_register {Variables[operand2]['address']} 2")
 
               # Perform the operation
               if "+" in line:
@@ -122,14 +122,16 @@ def ProsessLine(line):
     if parts[1] in Variables:
       UsedAddresses.remove(Variables[parts[1]]['address'])
       del Variables[parts[1]]
+
+  
   elif line.startswith("out("):
     # Extract the variable name
     var_name = line[4:-1]
     if var_name in Variables:
-        # Generate assembly instruction to output the value of the variable
-        assembly_instructions.append(f"output {Variables[var_name]['address']}")
+      # Generate assembly instruction to output the value of the variable
+      assembly_instructions.append(f"output {Variables[var_name]['address']}")
     else:
-        print(f"Error: Variable {var_name} not declared")
+      print(f"Error: Variable {var_name} not declared")
 
   return assembly_instructions
 
@@ -163,61 +165,63 @@ def SetALUoutputToBool(condition, assembly_instructions):
 def CompileFile(path):
   global UsedAddresses
   global Variables
-  assembly_instructions = []
-  temp = [[], [], [], [], [], []]
+  instructions = [[], [], [], [], [], [], [], [], [], [], [], []]
   nesting_val = 0
 
   inWhileLoop = False
   inIfStatement = False
   condition = None
-  startLoop =  [0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0]
+  startLoop = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
   fileList = FileToList(path)
   for line in fileList:
-      parts = line.split()
-      if len(parts) >=  1:
-          # Handling while loops
-          if parts[0] == "while" and not inWhileLoop:
-              cparts = line.split('(')
-              if len(cparts) >  1:
-                  condition = cparts[1].split(')')[0].strip()
-              inWhileLoop = True
-              startLoop[nesting_val] = len(assembly_instructions)
-              nesting_val += 1
+    parts = line.split()
+    if len(parts) >= 1:
+      # Handling while loops
+      if parts[0] == "while" and not inWhileLoop:
+        nesting_val += 1
+        cparts = line.split('(')
+        if len(cparts) > 1:
+          condition = cparts[1].split(')')[0].strip()
+        inWhileLoop = True
+        startLoop[nesting_val] = len(instructions[nesting_val - 1])
 
-          elif inWhileLoop:
-              if parts[0] == "}":
-                  SetALUoutputToBool(condition, assembly_instructions)
-                  assembly_instructions.append(f"jump_if_0 {len(assembly_instructions) +  1}")
-                  assembly_instructions.extend(temp[nesting_val])
-                  assembly_instructions.append(f"jump {startLoop[nesting_val]}")
-                  inWhileLoop = False
-                  nesting_val -= 1
-              elif parts[0] != "}" or parts[0] != "{":
-                temp[nesting_val].extend(ProsessLine(line))
+      elif inWhileLoop:
+        if parts[0] == "}":
+          SetALUoutputToBool(condition, instructions[nesting_val - 1])
+          instructions[0].append(
+              f"jump_if_0 {len(instructions[nesting_val - 1]) +  1}")
+          instructions[0].extend(instructions[nesting_val])
+          instructions[0].append(f"jump {startLoop[nesting_val]}")
+          inWhileLoop = False
+          nesting_val -= 1
+        elif parts[0] != "}" or parts[0] != "{":
+          instructions[nesting_val].extend(ProsessLine(line))
 
-          # Handling if statements
-          if parts[0] == "if" and not inIfStatement:
-              cparts = line.split('(')
-              if len(cparts) >  1:
-                  condition = cparts[1].split(')')[0].strip()
-              inIfStatement = True
+      # Handling if statements
+      if parts[0] == "if" and not inIfStatement:
+        cparts = line.split('(')
+        if len(cparts) > 1:
+          condition = cparts[1].split(')')[0].strip()
+        inIfStatement = True
 
-          elif inIfStatement:
-              if parts[0] == "}":
-                  SetALUoutputToBool(condition, assembly_instructions)
-                  assembly_instructions.append(f"jump_not_0 {(len(assembly_instructions) - 1) + len(temp[nesting_val])}")
-                  assembly_instructions.extend(temp[nesting_val])
-                  inIfStatement = False
-              elif parts[0] != "}" or parts[0] != "{":
-                temp[nesting_val].extend(ProsessLine(line))
+      elif inIfStatement:
+        if parts[0] == "}":
+          SetALUoutputToBool(condition, instructions[nesting_val])
+          instructions[nesting_val - 1].append(
+              f"jump_not_0 {(len(instructions[nesting_val - 1]) - 1) + len(instructions[nesting_val])}"
+          )
+          instructions[nesting_val - 1].extend(instructions[nesting_val])
+          inIfStatement = False
+        elif parts[0] != "}" or parts[0] != "{":
+          instructions[nesting_val].extend(ProsessLine(line))
 
-          else:
-            assembly_instructions.extend(ProsessLine(line))
+      else:
+        instructions[nesting_val].extend(ProsessLine(line))
 
   with open("assembly_output.asmbl", 'w') as file:
-      for instruction in assembly_instructions:
-          file.write(instruction + '\n')
+    for instruction in instructions[0]:
+      file.write(instruction + '\n')
 
 
 #compiler main
