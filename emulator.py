@@ -1,5 +1,4 @@
 def run_program(program):
-  # Simulate RAM with a dictionary
   ram = []
   for i in range(16):
     ram.append(0)

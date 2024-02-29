@@ -136,7 +136,8 @@ def ProsessLine(line):
   return assembly_instructions
 
 
-def SetALUoutputToBool(condition, assembly_instructions):
+def SetALUoutputToBool(condition):
+  assembly_instructions = []
   trueAddress = -1
   blankAddress = -1
   if condition == "true":
@@ -161,6 +162,14 @@ def SetALUoutputToBool(condition, assembly_instructions):
   if trueAddress != -1:
     UsedAddresses.remove(trueAddress)
 
+  return assembly_instructions
+
+
+def GetCurrentLineNo(instructions):
+  currentLine = 0
+  for i in range(0, len(instructions) - 2):
+    currentLine += len(instructions)
+  return currentLine
 
 def CompileFile(path):
   global UsedAddresses
@@ -184,11 +193,11 @@ def CompileFile(path):
         if len(cparts) > 1:
           condition = cparts[1].split(')')[0].strip()
         inWhileLoop = True
-        startLoop[nesting_val] = len(instructions[nesting_val - 1])
+        startLoop[nesting_val] = GetCurrentLineNo(instructions)
 
       elif inWhileLoop:
         if parts[0] == "}":
-          SetALUoutputToBool(condition, instructions[nesting_val - 1])
+          instructions[nesting_val - 1] = SetALUoutputToBool(condition)
           instructions[0].append(
               f"jump_if_0 {len(instructions[nesting_val - 1]) +  1}")
           instructions[0].extend(instructions[nesting_val])
@@ -203,15 +212,17 @@ def CompileFile(path):
         cparts = line.split('(')
         if len(cparts) > 1:
           condition = cparts[1].split(')')[0].strip()
+        nesting_val += 1
         inIfStatement = True
 
       elif inIfStatement:
         if parts[0] == "}":
-          SetALUoutputToBool(condition, instructions[nesting_val])
+          instructions[nesting_val - 1] = SetALUoutputToBool(condition)
           instructions[nesting_val - 1].append(
-              f"jump_not_0 {(len(instructions[nesting_val - 1]) - 1) + len(instructions[nesting_val])}"
+              f"jump_not_0 {GetCurrentLineNo(instructions)}"
           )
           instructions[nesting_val - 1].extend(instructions[nesting_val])
+          nesting_val -= 1
           inIfStatement = False
         elif parts[0] != "}" or parts[0] != "{":
           instructions[nesting_val].extend(ProsessLine(line))

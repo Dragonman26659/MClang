@@ -1,5 +1,4 @@
-loadToRam 0 1
-loadToRam 1 0
-output 1
-output 1
-output 0
+add 3 1
+jump_not_0 120
+output 2
+output 2
