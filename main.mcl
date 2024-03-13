@@ -10,33 +10,33 @@ Tripple slash is a comment that spans multiple lines until another tripleslash
 
 
 //This is how variables are declared
-var int variableOne = 1
-var int variableTwo = 0
-var bool yes = true
+var int variableOne = 1;
+var int variableTwo = 0;
+var bool yes = true;
 
 
-variableOne++ //increment
+variableOne++; //increment
 out(variableOne)  //Default output function, outputs any type
-variableOne-- //Decrement
+variableOne--; //Decrement
 
 funct int, int SingleFib(int x, int y)
 {
-    x = x + y
-    out(x)
-    y = x + y
-    out(y)
+    x = x + y;
+    out(x);
+    y = x + y;
+    out(y);
 }
 
 funct Bool isGreaterThan(number, comparitor)
 {
-    return number > comparitor
+    return number > comparitor;
 }
 
 //allows a function to be written in bytecode
 byteFunct void Function1(int arg1, int arg2)
 {
-  address adress1 = arg1.address //Gets the address of that variable (Local)
-  address adress2 = arg2.address
+  address adress1 = arg1.address; //Gets the address of that variable (Local)
+  address adress2 = arg2.address;
   
   
   #StartByte
@@ -51,15 +51,23 @@ byteFunct void Function1(int arg1, int arg2)
 //supported loops, while and for NOT foreach too comlicated
 while (yes)
 {
-  variableOne, variableTwo = SingleFib(variableOne, variableTwo)
+  variableOne, variableTwo = SingleFib(variableOne, variableTwo);
   if (isGreaterThan(variableOne, 100))
   {
-    break
+    break;
   }
 }
 
-var char array[20] stringType1 = "this is a char array"
-var string stringType2 = "this is also a char array"
-var char charater = 'a'
+//delete any variable to free that adress in memory for memory management
+delete variableOne;
+delete variableTwo;
 
-out("Output")
+
+var char array[20] stringType1 = "this is a char array";
+var string stringType2 = "this is also a char array";
+var char charater = 'a';
+
+//free up memory becuase arrays take up lots of memory
+delete stringType1;
+
+out("Output");
