@@ -1,14 +1,65 @@
+#include "other.mcl"
+
+//Definitions like C++ ish
+#Define Print(...) -> out(args)
+
+///
+Executed like python however any functions defined in includes are calculated first
+Tripple slash is a comment that spans multiple lines until another tripleslash
+///
+
+
+//This is how variables are declared
+var int variableOne = 1
+var int variableTwo = 0
 var bool yes = true
-var bool no = false
-var int num = 12
 
 
-if (yes)
+variableOne++ //increment
+out(variableOne)  //Default output function, outputs any type
+variableOne-- //Decrement
+
+funct int, int SingleFib(int x, int y)
 {
-  out(num)
+    x = x + y
+    out(x)
+    y = x + y
+    out(y)
 }
 
-if (no)
+funct Bool isGreaterThan(number, comparitor)
 {
-  out(num)
+    return number > comparitor
 }
+
+//allows a function to be written in bytecode
+byteFunct void Function1(int arg1, int arg2)
+{
+  address adress1 = arg1.address //Gets the address of that variable (Local)
+  address adress2 = arg2.address
+  
+  
+  #StartByte
+  //Comments Still work
+
+  //variables work in square brackets ONLY if they are address type
+  add [adress1] [adress2]
+  
+  #EndByte
+}
+
+//supported loops, while and for NOT foreach too comlicated
+while (yes)
+{
+  variableOne, variableTwo = SingleFib(variableOne, variableTwo)
+  if (isGreaterThan(variableOne, 100))
+  {
+    break
+  }
+}
+
+var char array[20] stringType1 = "this is a char array"
+var string stringType2 = "this is also a char array"
+var char charater = 'a'
+
+out("Output")

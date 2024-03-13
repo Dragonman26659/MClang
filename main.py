@@ -51,7 +51,7 @@ def ProsessLine(line):
             'type': var_type,
             'address': Find_Next_Address()
         }
-        
+
         # Generate assembly instruction to load value into memory
         if var_type == "int":
           assembly_instructions.append(
@@ -66,9 +66,8 @@ def ProsessLine(line):
       else:
         exit(f"Error: Variable {var_name} already declared")
 
-  
   # Check if the line is a variable assignment with arithmetic operations
-  elif "=" in line:
+  if "=" in line and not line.startswith("var"):
     parts = line.split("=")
     print(parts)
     if len(parts) == 2:
@@ -117,13 +116,31 @@ def ProsessLine(line):
       else:
         exit(f"Error: Variable {var_name} not declared")
 
+  # Check if the line is a variable assignment with arithmetic operations
+  if "++" in line:
+    print("Found Increment")
+    parts = line.strip().split("++")
+    var_name = parts[0].strip()
+    if var_name in Variables:
+        if Variables[var_name]["type"] == "int":
+          # Increment the value of the variable by 1
+          assembly_instructions.append("loadToReg 15 1")
+          assembly_instructions.append(
+              f"load_RAM_to_register {Variables[var_name]['address']} 1")
+          assembly_instructions.append("add 15 1")
+          assembly_instructions.append(
+              f"store_to_RAM {Variables[var_name]['address']} 1")
+        else:
+          exit("Error: Only integer variables can be incremented")
+    else:
+        exit(f"Error: Variable {var_name} not declared")
+
   elif line.startswith("delete"):
     parts = line.split()
     if parts[1] in Variables:
       UsedAddresses.remove(Variables[parts[1]]['address'])
       del Variables[parts[1]]
 
-  
   elif line.startswith("out("):
     # Extract the variable name
     var_name = line[4:-1]
@@ -170,6 +187,7 @@ def GetCurrentLineNo(instructions):
   for i in range(0, len(instructions) - 2):
     currentLine += len(instructions)
   return currentLine
+
 
 def CompileFile(path):
   global UsedAddresses
@@ -219,8 +237,7 @@ def CompileFile(path):
         if parts[0] == "}":
           instructions[nesting_val - 1] = SetALUoutputToBool(condition)
           instructions[nesting_val - 1].append(
-              f"jump_not_0 {GetCurrentLineNo(instructions)}"
-          )
+              f"jump_not_0 {GetCurrentLineNo(instructions)}")
           instructions[nesting_val - 1].extend(instructions[nesting_val])
           nesting_val -= 1
           inIfStatement = False
