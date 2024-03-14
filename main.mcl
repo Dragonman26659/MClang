@@ -69,5 +69,6 @@ var char charater = 'a';
 
 //free up memory becuase arrays take up lots of memory
 delete stringType1;
+delete stringType2;
 
 out("Output");

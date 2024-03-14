@@ -1,0 +1,69 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\MClang\\C\u002B\u002B mcl\\McLang\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{85218849-BBDE-4FB8-AE3E-EA15BCDD7CBC}|ByteCompiler\\ByteCompiler.vcxproj|D:\\MClang\\C\u002B\u002B mcl\\McLang\\ByteCompiler\\src\\lexer.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{85218849-BBDE-4FB8-AE3E-EA15BCDD7CBC}|ByteCompiler\\ByteCompiler.vcxproj|solutionrelative:ByteCompiler\\src\\lexer.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{85218849-BBDE-4FB8-AE3E-EA15BCDD7CBC}|ByteCompiler\\ByteCompiler.vcxproj|D:\\MClang\\C\u002B\u002B mcl\\McLang\\ByteCompiler\\src\\parser.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{85218849-BBDE-4FB8-AE3E-EA15BCDD7CBC}|ByteCompiler\\ByteCompiler.vcxproj|solutionrelative:ByteCompiler\\src\\parser.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{85218849-BBDE-4FB8-AE3E-EA15BCDD7CBC}|ByteCompiler\\ByteCompiler.vcxproj|D:\\MClang\\C\u002B\u002B mcl\\McLang\\ByteCompiler\\src\\compiler.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{85218849-BBDE-4FB8-AE3E-EA15BCDD7CBC}|ByteCompiler\\ByteCompiler.vcxproj|solutionrelative:ByteCompiler\\src\\compiler.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "compiler.h",
+              "DocumentMoniker": "D:\\MClang\\C\u002B\u002B mcl\\McLang\\ByteCompiler\\src\\compiler.h",
+              "RelativeDocumentMoniker": "ByteCompiler\\src\\compiler.h",
+              "ToolTip": "D:\\MClang\\C\u002B\u002B mcl\\McLang\\ByteCompiler\\src\\compiler.h",
+              "RelativeToolTip": "ByteCompiler\\src\\compiler.h",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABoAAAAWAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2024-03-13T19:32:36.427Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "parser.cpp",
+              "DocumentMoniker": "D:\\MClang\\C\u002B\u002B mcl\\McLang\\ByteCompiler\\src\\parser.cpp",
+              "RelativeDocumentMoniker": "ByteCompiler\\src\\parser.cpp",
+              "ToolTip": "D:\\MClang\\C\u002B\u002B mcl\\McLang\\ByteCompiler\\src\\parser.cpp",
+              "RelativeToolTip": "ByteCompiler\\src\\parser.cpp",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-03-13T19:32:26.618Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "lexer.cpp",
+              "DocumentMoniker": "D:\\MClang\\C\u002B\u002B mcl\\McLang\\ByteCompiler\\src\\lexer.cpp",
+              "RelativeDocumentMoniker": "ByteCompiler\\src\\lexer.cpp",
+              "ToolTip": "D:\\MClang\\C\u002B\u002B mcl\\McLang\\ByteCompiler\\src\\lexer.cpp",
+              "RelativeToolTip": "ByteCompiler\\src\\lexer.cpp",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAgAAAAdAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-03-13T19:32:03.763Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
