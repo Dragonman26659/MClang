@@ -27,7 +27,7 @@ funct int, int SingleFib(int x, int y)
     out(y);
 }
 
-funct Bool isGreaterThan(number, comparitor)
+funct Bool isGreaterThan(int number, int comparitor)
 {
     return number > comparitor;
 }
