@@ -3,6 +3,10 @@ from PythonImpl.parser import Parser
 from PythonImpl.codegen import CodeGen
 
 fname = "test1.mcl"
+tempdir = "temp"
+buildDir = "build"
+
+
 with open(fname) as f:
     text_input = f.read()
 
@@ -21,4 +25,4 @@ parser = pg.get_parser()
 parser.parse(tokens).eval()
 
 codegen.create_ir()
-codegen.save_ir("output.ll")
+codegen.save_ir(f"{tempdir}/output.ll")

@@ -1,7 +1,0 @@
-loadToRam 0 1
-loadToRam 1 0
-loadToReg 1 1
-load_RAM_to_register 0 1
-add 1 1
-store_to_RAM 0 1
-output 0
