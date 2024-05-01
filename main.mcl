@@ -33,7 +33,7 @@ funct Bool isGreaterThan(int number, int comparitor)
 }
 
 //allows a function to be written in bytecode
-byteFunct void Function1(int arg1, int arg2)
+byteFunct Function1(int arg1, int arg2)
 {
   address adress1 = arg1.address; //Gets the address of that variable (Local)
   address adress2 = arg2.address;

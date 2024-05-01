@@ -5,12 +5,11 @@ from PythonImpl.ast import Number, Sum, Sub, Print
 class Parser():
 
   def __init__(self, module, builder, printf):
-    self.pg = ParserGenerator(
-        # A list of all token names accepted by the parser.
-        [
-            'NUMBER', 'PRINT', 'OPEN_PAREN', 'CLOSE_PAREN', 'SEMI_COLON',
-            'SUM', 'SUB'
-        ])
+    self.pg = ParserGenerator([
+        'NUMBER', 'PRINT', 'OPEN_PAREN', 'CLOSE_PAREN', 'SEMI_COLON', 'SUM',
+        'SUB', 'VAR', 'INT', 'EQUALS', 'NUMBER_VALUE', 'CHAR', 'STRING',
+        'ARRAY', 'BOOL', 'BYTEFUNCT', 'FUNCT', 'IF', 'ELSE', 'WHILE'
+    ])
     self.module = module
     self.builder = builder
     self.printf = printf
@@ -36,6 +35,16 @@ class Parser():
     @self.pg.production('expression : NUMBER')
     def number(p):
       return Number(self.builder, self.module, p[0].value)
+
+    @self.pg.production(
+        'expression : VAR type IDENTIFIER EQUALS expression SEMI_COLON')
+    def var_declaration(p):
+      var_name = p[2]
+      var_type = p[1]
+      var_value = p[5]
+      # Handle var declaration logic here
+      return VariableDeclaration(self.builder, self.module, var_name, var_type,
+                                 var_value)
 
     @self.pg.error
     def error_handle(token):
